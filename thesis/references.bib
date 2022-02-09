@@ -1,0 +1,189 @@
+@inproceedings{RvG19,
+  title={Justness - A Completeness Criterion for Capturing Liveness Properties (Extended Abstract)},
+  author={Rob van Glabbeek},
+  booktitle={FoSSaCS},
+  year={2019}
+}
+@article{DvGH17,
+   title={Analysing Mutual Exclusion using Process Algebra with Signals},
+   volume={255},
+   ISSN={2075-2180},
+   DOI={10.4204/eptcs.255.2},
+   journal={Electronic Proceedings in Theoretical Computer Science},
+   publisher={Open Publishing Association},
+   author={Dyseryn, Victor and van Glabbeek, Rob and Höfner, Peter},
+   year={2017},
+   month={Aug},
+   pages={18–34}
+}
+@article{DG10,
+ author = {Gorla, Daniele},
+ title = {Towards a Unified Approach to Encodability and Separation Results for Process Calculi},
+ journal = {Inf. Comput.},
+ issue_date = {September, 2010},
+ volume = {208},
+ number = {9},
+ month = sep,
+ year = {2010},
+ issn = {0890-5401},
+ pages = {1031--1053},
+ numpages = {23},
+ doi = {10.1016/j.ic.2010.05.002},
+ acmid = {1839154},
+ publisher = {Academic Press, Inc.},
+ address = {Duluth, MN, USA},
+ keywords = {Encodings, Expressiveness, Process calculi},
+}
+@InProceedings{RvG95,
+author="van Glabbeek, Rob J",
+editor="Ponse, A.
+and Verhoef, C.
+and van Vlijmen, S. F. M.",
+title="On the Expressiveness of ACP",
+booktitle="Algebra of Communicating Processes",
+year="1995",
+publisher="Springer London",
+address="London",
+pages="188--217",
+abstract="DeSimone showed that a wide class of languages, including CCS, SCCS, CSP and ACP, are expressible up to strong bisimulation equivalence in Meije. He also showed that every recursively enumerable process graph is representable by a Meije expression. Meije in turn is expressible in aprACP (ACP with action prefixing instead of sequential composition).",
+isbn="978-1-4471-2120-6"
+}
+@inproceedings{PP16,
+author = {{\AA}man Pohjola, Johannes and Parrow, Joachim},
+year = {2016},
+month = {04},
+pages = {780-803},
+title = {The Expressive Power of Monotonic Parallel Composition},
+volume = {9632},
+isbn = {978-3-662-49497-4},
+doi = {10.1007/978-3-662-49498-1_30}
+}
+@InProceedings{EM99,
+author="Ene, Cristian
+and Muntean, Traian",
+editor="Ciobanu, Gabriel
+and P{\u{a}}un, Gheorghe",
+title="Expressiveness of point-to-point versus broadcast communications",
+booktitle="Fundamentals of Computation Theory",
+year="1999",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="258--268"
+}
+@book{RM80,
+ author = {Milner, R.},
+ title = {A  Calculus of Communicating Systems},
+ year = {1980},
+ isbn = {0387102353},
+ publisher = {Springer-Verlag},
+ address = {Berlin, Heidelberg},
+}
+@article{JP08,
+ author = {Parrow, Joachim},
+ title = {Expressiveness of Process Algebras},
+ journal = {Electron. Notes Theor. Comput. Sci.},
+ issue_date = {April, 2008},
+ volume = {209},
+ month = apr,
+ year = {2008},
+ issn = {1571-0661},
+ pages = {173--186},
+ numpages = {14},
+ doi = {10.1016/j.entcs.2008.04.011},
+ acmid = {1365211},
+ publisher = {Elsevier Science Publishers B. V.},
+ address = {Amsterdam, The Netherlands, The Netherlands},
+ keywords = {Process algebra, expressiveness},
+}
+@article{VBG09,
+  title={An expressiveness study of priority in process calculi},
+  volume={19},
+  DOI={10.1017/S0960129509990168},
+  number={6},
+  journal={Mathematical Structures in Computer Science},
+  publisher={Cambridge University Press},
+  author={Versari, Cristian and Busi, Nadia and Gorrieri, Roberto},
+  year={2009},
+  pages={1161–1189}
+}
+@article{IP08,
+title = "CCS with priority guards",
+journal = "The Journal of Logic and Algebraic Programming",
+volume = "75",
+number = "1",
+pages = "139 - 165",
+year = "2008",
+note = "Algebraic Process Calculi. The First Twenty Five Years and Beyond. III",
+issn = "1567-8326",
+doi = "https://doi.org/10.1016/j.jlap.2007.06.005",
+author = "Iain Phillips",
+keywords = "CCS, Priority, Expressiveness, -calculus",
+abstract = "It has long been recognised that standard process algebra has difficulty dealing with actions of different priority, such as for instance an interrupt action of high priority. Various solutions have been proposed. We introduce a new approach, involving the addition of “priority guards” to Milner’s process calculus CCS. In our approach, priority is unstratified, meaning that actions are not assigned fixed levels, so that the same action can have different priority depending where it appears in a program. Unlike in other unstratified accounts of priority in CCS (such as that of Camilleri and Winskel), we treat inputs and outputs symmetrically. We introduce the new calculus, give examples, develop its theory (including bisimulation and equational laws), and compare it with existing approaches. We use leader election problems to show that priority adds expressiveness to both CCS and the π-calculus."
+}
+@InProceedings{EM99,
+author="Ene, Cristian
+and Muntean, Traian",
+editor="Ciobanu, Gabriel
+and P{\u{a}}un, Gheorghe",
+title="Expressiveness of point-to-point versus broadcast communications",
+booktitle="Fundamentals of Computation Theory",
+year="1999",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="258--268",
+abstract="In this paper we address the problem of the expressive po- wer of point-to-point communication to implement broadcast communication. We demonstrate that point-to-point communication as in CCS [M89] is ``too asynchronous'' to implement broadcast communication as in CBS [P95]. Milner's $\pi$-calculus [M91] is a calculus in which all communications are point-to-point. We introduce b$\pi$-calculus, using broadcast instead of rendez-vous primitive communication, as a variant of value-passing CBS in which communications are made on channels as in Hoare's CSP [H85] --- and channels can be transmitted too as in $\pi$-calculus --- but by a broadcast protocol: processes speak one at a time and are heard instantaneously by all others. In this paper, using the fact that $\pi$-calculus enjoys a certain interleaving property, whereas b$\pi$-calculus does not, we prove that there does not exist any uniform, parallel-preserving translation from b$\pi$-calculus into $\pi$-calculus, up to any ``reasonable'' equivalence. Using arguments similar to [P97], we also prove a separation result between CBS and CCS.",
+isbn="978-3-540-48321-2"
+}
+@incollection{CLN01,
+title = "CHAPTER 12 - Priority in Process Algebra",
+editor = "J.A. Bergstra and A. Ponse and S.A. Smolka",
+booktitle = "Handbook of Process Algebra",
+publisher = "Elsevier Science",
+address = "Amsterdam",
+pages = "711 - 765",
+year = "2001",
+isbn = "978-0-444-82830-9",
+doi = "https://doi.org/10.1016/B978-044482830-9/50030-8",
+author = "Rance Cleaveland and Gerald Lüttgen and V. Natarajan"
+}
+@article{vGH15,
+author    = {Rob J. van Glabbeek and
+             Peter H{\"{o}}fner},
+title     = {Progress, Fairness and Justness in Process Algebra},
+journal   = {CoRR},
+volume    = {abs/1501.03268},
+year      = {2015},
+url       = {http://arxiv.org/abs/1501.03268},
+archivePrefix = {arXiv},
+eprint    = {1501.03268},
+timestamp = {Mon, 13 Aug 2018 16:48:40 +0200},
+biburl    = {https://dblp.org/rec/bib/journals/corr/GlabbeekH15},
+bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@InProceedings{KP91,
+author="Prasad, K. V. S.",
+editor="Abramsky, S.
+and Maibaum, T. S. E.",
+title="A calculus of broadcasting systems",
+booktitle="TAPSOFT '91",
+year="1991",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="338--358",
+abstract="Local area networks (LANs) and everyday speech inspire a model of communication by unbuffered broadcast. Computation proceeds by a sequence of messages, each transmitted by one agent and received by zero or more others. Transmission is autonomous, but reception is not. Each message is received instantaneously by all agents except the transmitter, but is read only by those who were monitoring it at the time; others discard it. As in CCS, agents learn about the environment only through the messages they read. Programming such a system is hard because we have to ensure that messages are read.",
+isbn="978-3-540-46563-8"
+}
+@article{MSB18,
+title={Liveness analysis in process algebras},
+author={Bouwman, MS},
+year={2018},
+url={https://www.win.tue.nl/~timw/downloads/bouwman_seminar.pdf}
+}
+@inproceedings{CTJ94,
+  title={Interpreting broadcast communication in ccs with priority choice},
+  author={Jensen, Claus Torp},
+  booktitle={Proceedings of the 6th Nordic Workshop on Programming Theory},
+  pages={49--70},
+  year={1994},
+  organization={Citeseer}
+}
