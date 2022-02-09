@@ -1,0 +1,1028 @@
+\documentclass[adraft]{eptcs}
+\usepackage{breakurl}
+\usepackage{underscore}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage{mathtools}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%				Characters			          %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareSymbolFont{frenchscript}{OMS}{ztmcm}{m}{n}
+\DeclareMathSymbol{\A}{\mathord}{frenchscript}{65}    % set of CCS names
+%%%renamed since already defined
+%\DeclareMathSymbol{\C}{\mathord}{frenchscript}{67}    % component set
+\DeclareMathSymbol{\Ce}{\mathord}{frenchscript}{67}    % component set
+%%%renamed since already defined
+\DeclareMathSymbol{\Ge}{\mathord}{frenchscript}{71}    % transition system
+\DeclareMathSymbol{\HC}{\mathord}{frenchscript}{72}    % transition system
+%\DeclareMathSymbol{\I}{\mathord}{frenchscript}{73}    % instruction set
+\DeclareMathSymbol{\C}{\mathord}{frenchscript}{67}% set of components
+\newcommand{\I}{\mathcal{I}}
+\DeclareMathSymbol{\Lab}{\mathord}{frenchscript}{76}  % set of CCS labels
+\DeclareMathSymbol{\Pow}{\mathord}{frenchscript}{80}  % powerset
+\DeclareMathSymbol{\Tk}{\mathord}{frenchscript}{84}    % task set
+\DeclareMathSymbol{\V}{\mathord}{frenchscript}{88}    % set of process variables (X)
+\DeclareMathAlphabet{\mathbbm}{U}{bbm}{m}{n}          % blackboard bold
+\newcommand{\T}{\rm T}                      % set of closed expressions / terms
+\newcommand{\TS}{\mathcal{TS}}
+\newcommand{\IT}{\mathbbm{T}}               % set of valid expressions / terms
+\newcommand{\IN}{\mathbbm{N}}               % natural numbers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%			Theorem-like environments			  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{defi}{Definition}
+\newtheorem{theo}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{lemm}{Lemma}
+\newtheorem{coro}{Corollary}
+\newtheorem{obs}{Observation}
+\newtheorem{exam}{Example}
+\newtheorem{ppt}{Property}
+
+
+\newenvironment{definition}[1]{\begin{defi} \rm \label{df:#1} }{\end{defi}}
+\newenvironment{definitionA}[2]{\begin{defi}[#1] \rm \label{df:#2} }{\end{defi}}
+\newenvironment{theorem}[1]{\begin{theo} \rm \label{thm:#1} }{\end{theo}}
+\newenvironment{proposition}[1]{\begin{prop} \rm \label{pr:#1} }{\end{prop}}
+\newenvironment{lemma}[1]{\begin{lemm} \rm \label{lem:#1} }{\end{lemm}}
+\newenvironment{corollary}[1]{\begin{coro} \rm \label{cor:#1} }{\end{coro}}
+\newenvironment{observation}[1]{\begin{obs} \rm \label{obs:#1} }{\end{obs}}
+\newenvironment{example}[1]{\begin{exam} \rm \label{ex:#1} }{\end{exam}}
+\newenvironment{proof}{\begin{trivlist} \item[\hspace{\labelsep}\bf Proof:]}{\hfill $\Box$\end{trivlist}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%			Theorem-like references 			  %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Sec}[1]{Section~\ref{sec:#1}}
+\newcommand{\Sects}{Sections}
+\newcommand{\App}[1]{Appendix~\ref{app:#1}}
+\newcommand{\df}[1]{Definition~\ref{df:#1}}
+\newcommand{\thm}[1]{Theorem~\ref{thm:#1}}
+\newcommand{\pr}[1]{Proposition~\ref{pr:#1}}
+\newcommand{\lem}[1]{Lemma~\ref{lem:#1}}
+\newcommand{\cor}[1]{Corollary~\ref{cor:#1}}
+\newcommand{\Obs}[1]{Observation~\ref{obs:#1}}
+\newcommand{\ex}[1]{Example~\ref{ex:#1}}
+\newcommand{\tab}[1]{Table~\ref{tab:#1}}
+\newcommand{\fig}[1]{Figure~\ref{#1}}
+\newcommand{\exs}{Examples\xspace}
+\newcommand{\powset}[1]{\mathcal{P}(#1)} % power set
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%        expanding ARROWS from James; changed by Rob  14-12-10.        %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\def\comesfrom{\@transition\leftarrowfill}
+\def\goesto{\@transition\rightarrowfill}
+\def\ngoesto{\@transition\nrightarrowfill}
+\def\Goesto{\@transition\Rightarrowfill}
+\def\nGoesto{\@transition\nRightarrowfill}
+\def\xmapsto{\@transition\mapstofill}
+\def\nxmapsto{\@transition\nmapstofill}
+\def\@transition#1{\@@transition{#1}}
+\newbox\@transbox
+\newbox\@arrowbox
+\newbox\@downbox
+\def\@@transition#1#2%
+   {\setbox\@transbox\hbox
+      {\vrule height 1.5ex depth .8ex width 0ex\hskip0.25em$\scriptstyle#2$\hskip0.25em}
+   \ifdim\wd\@transbox<1.5em
+      \setbox\@transbox\hbox to 1.5em{\hfil\box\@transbox\hfil}\fi
+   \setbox\@arrowbox\hbox to \wd\@transbox{#1}
+   \ht\@arrowbox\z@\dp\@arrowbox\z@
+   \setbox\@transbox\hbox{$\mathop{\box\@arrowbox}\limits^{\box\@transbox}$}
+   \dp\@transbox\z@\ht\@transbox 10pt
+   \mathrel{\box\@transbox}}
+\def\nrightarrowfill{$\m@th\mathord-\mkern-6mu%
+  \cleaders\hbox{$\mkern-2mu\mathord-\mkern-2mu$}\hfill
+  \mkern-6mu\mathord\not\mkern-2mu\mathord\rightarrow$}
+\def\Rightarrowfill{$\m@th\mathord=\mkern-6mu%
+  \cleaders\hbox{$\mkern-2mu\mathord=\mkern-2mu$}\hfill
+  \mkern-6mu\mathord\Rightarrow$}
+\def\nRightarrowfill{$\m@th\mathord=\mkern-6mu%
+  \cleaders\hbox{$\mkern-2mu\mathord=\mkern-2mu$}\hfill
+  \mkern-6mu\mathord\not\mathord\Rightarrow$}
+\def\mapstofill{$\m@th\mathord\mapstochar\mathord-\mkern-6mu%
+  \cleaders\hbox{$\mkern-2mu\mathord-\mkern-2mu$}\hfill
+  \mkern-6mu\mathord\rightarrow$}
+\def\nmapstofill{$\m@th\mathord\mapstochar\mathord-\mkern-6mu%
+  \cleaders\hbox{$\mkern-2mu\mathord-\mkern-2mu$}\hfill
+  \mkern-6mu\mathord\not\mkern-2mu\mathord\rightarrow$}
+\makeatother %%%%% end of arrows definition
+\newcommand{\ar}[1]{\mathrel{\goesto{#1}}}            % arrow
+\newcommand{\nar}[1]{{\ngoesto{#1\;}}}                % negated arrow
+\newcommand{\goto}[1]{\stackrel{#1}{\longrightarrow}} % transition
+\newcommand{\hoto}[1]{\mathbin{\stackrel{#1}{\raisebox{0pt} % hypotetical
+        [3pt][0pt]{$\scriptstyle--\rightarrow$}}}}          % transition
+\newcommand{\gonotto}[1]{\mbox{$\,\,\,\not\!\!\!\stackrel{#1~}{\longrightarrow}$}} % negated tr.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Tr}{\textit{Tr}}                   % transitions
+\newcommand{\source}{\textit{source}}           % source of transition
+\newcommand{\target}{\textit{target}}           % target of transition
+%\newcommand{\instr}{\textit{instr}}                   % program instruction(s) involved in tr
+%%added tiny spacing if used as funciton with paranthesis
+\newcommand{\instr}{\textit{instr\/}}
+\newcommand{\ai}{\textit{ai}}                         % program instruction(s) responsible for tr.
+\newcommand{\comp}{\textit{comp\/}}                     % components involved in transition
+\newcommand{\cmp}{\textit{cp\/}}                        % components involved in instruction
+\newcommand{\npc}{\textit{npc}}                        % components causing transition
+\newcommand{\afc}{\textit{afc}}                        % components affected by transition
+\newcommand{\defis}{\stackrel{{\it def}}{=}}
+\newcommand{\nil}{\textbf{0}}
+\newcommand{\X}{x}
+\newcommand{\Y}{y}
+\newcommand{\W}{{\rm W}}
+\newcommand{\St}{{\rm S}}
+\newcommand{\Ac}{{\rm A}}
+\newcommand{\Ts}{{\rm T}}
+\newcommand{\D}{{\rm D}}
+%\newcommand{\C}{{\rm C}}
+\newcommand{\In}{{\rm I}}
+\newcommand{\Sy}{{\rm Z}}
+\newcommand{\Ex}{{\rm Ext}}
+\renewcommand{\Pr}{{\rm Pr}}
+\newcommand{\Fu}{{\rm Fu}}
+\newcommand{\E}{{\rm P}}
+\newcommand{\Cp}{{\rm C}}
+\newcommand{\Gr}{{\rm G}}
+\newcommand{\J}{{\rm J}}
+\newcommand{\tr}{Tr}
+\newcommand{\src}{source}
+\newcommand{\tgt}{target}
+%\newcommand{\npc}{npc}
+
+\newcommand{\dom}{{\it dom}}                          % domain
+\newcommand{\Left}{\textsc{l}}
+\newcommand{\R}{\textsc{r}}
+\newcommand{\M}{\textsc{m}}
+\newcommand{\cT}{{\rm T}}                             % set of closed terms
+\newcommand{\aconc}{\mathrel{\mbox{$\smile\hspace{-.95ex}\raisebox{2.5pt}{$\scriptscriptstyle\bullet$}$}}}
+\newcommand{\naconc}{\mathrel{\mbox{$\,\not\!\smile\hspace{-.95ex}\raisebox{2.5pt}{$\scriptscriptstyle\bullet$}$}}}
+\newcommand{\conc}{\smile}                            % concurrency relation
+\newcommand{\nconc}{\,\not\!\smile}
+\newcommand{\dcup}{\charfusion[\mathbin]{\cup}{\mbox{\Large$\cdot$}}}  % disjoint union
+\newcommand{\plat}[1]{\raisebox{0pt}[0pt][0pt]{#1}}   % no vertical space
+\newcommand{\weg}[1]{}                                % omitted material
+\newcommand{\bst}{\mathbin\B^{\St}}
+\newcommand{\btr}{\mathbin\B^{\tr}}
+\newcommand{\bkt}[1]{\llbracket \plat{$#1$} \rrbracket}
+
+\newcommand{\init}[2]{{\bf initialise}\ \ensuremath{#1}{\ \bf to\ }\ensuremath{#2}}
+\newcommand{\shar}[1]{\mathord{\stackrel{#1}{\rightarrow}}}
+\newcommand{\mylabel}[1]{\hypertarget{lab:#1}{\ \mbox{{\scriptsize\sc (#1)}}}}
+\newcommand{\myref}[1]{\hyperlink{lab:#1}{\scriptsize\sc (#1)}}
+
+
+
+% ----------------------------------------------------------------
+\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+\hfuzz2pt % Don't report over-full h-boxes if over-edge is small
+
+\DeclareMathSymbol{\A}{\mathord}{frenchscript}{65}   % set of ABC agent identifiers
+\DeclareMathSymbol{\B}{\mathord}{frenchscript}{66}   % set of ABC broadcast names
+\DeclareMathSymbol{\C}{\mathord}{frenchscript}{67}   % set of ABC handshake communication names
+\DeclareMathSymbol{\FS}{\mathord}{frenchscript}{70}  % fairness specification
+\DeclareMathSymbol{\HC}{\mathord}{frenchscript}{72}  % set of ABC handshake communications
+\DeclareMathSymbol{\Lab}{\mathord}{frenchscript}{76} % set of labels in transition system
+\newcommand{\F}{Q}                                   % typical process expression
+\newcommand{\AI}{A}                                  % typical agent identifier
+\newcommand{\BI}{B}                                  % typical agent identifier
+\newcommand{\CI}{C}                                  % typical agent identifier
+
+\makeatletter
+\def\moverlay{\mathpalette\mov@rlay}
+\def\mov@rlay#1#2{\leavevmode\vtop{%
+   \baselineskip\z@skip \lineskiplimit-\maxdimen
+   \ialign{\hfil$\m@th#1##$\hfil\cr#2\crcr}}}
+\newcommand{\charfusion}[3][\mathord]{
+    #1{\ifx#1\mathop\vphantom{#2}\fi
+        \mathpalette\mov@rlay{#2\cr#3}
+      }
+    \ifx#1\mathop\expandafter\displaylimits\fi}
+\makeatother
+\newcommand{\bis}{\raisebox{.3ex}{$\underline{\makebox[.7em]{$\leftrightarrow$}}$}}
+%\newcommand{\ABC}{ABC\xspace}
+\newcommand{\en}{\textit{en}}
+%\newcommand{\src}{{\it src}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\title{Internship Report: Expressiveness of Distributed Systems}
+\def\titlerunning{Report}
+\author{Anran Wang}
+\def\authorrunning{Anran Wang}
+\maketitle
+
+\section{Introduction}
+
+This is a report as a result of an internship under supervision of Dr. Rob van Glabbeek and Dr. Peter H\"ofner from 6th August 2018 to 12th October 2018.
+
+This report can be roughly divided into two parts: the first part is focused on \emph{concurrency}, where the semantics for ABC(Algebra of Broadcasting Communication)\cite{vGH15} with respect to Component-Labelled Transition System(CLTS) is given, with the purpose to distinguish just and unjust paths. The second part is focused on \emph{expressiveness}, where an encoding of ABC to CCS with Priority(CCS$_P$)\footnote{Johannes.Amanpohjola@data61.csiro.au} is proposed, and proved adequate with respect to the criterion proposed by \cite{G10}.
+
+This report could be completed by some follow-up works like: Revise the CLTS semantics for ABC to have more expressiveness power in the sense that it can distinguish more paths that are unjust; reconsider the CLTS semantics for CCS$_P$; complete the proof for the adequacy of the encoding from ABC to CCS$_P$; find and prove separation results to prove that CCS$_P$ is strictly more expressive than ABC; explore if CCS$_P$ with $n+1$ priorities is strictly more expressive than CCS$_P$ with $n$ priorities $\dots$
+
+\paragraph{Reading guide}
+
+In \Sec{CLTS}, some fundamentals are provided, including CLTS, just paths, concurrency closure, etc.
+
+In \Sec{ABC}, the Component-labelled Transition System (CLTS) semantics for Algebra of Broadcasting Communication (ABC) is proposed, as well as the corresponding definition of well-colored paths. In this section, a detailed proof that CLTS(ABC) respects concurrency closure and that well-coloration is equivalent to justness is shown.
+
+In \Sec{aABC}, an example is given to argue that the CLTS semantics proposed in \Sec{ABC} is not expressive enough to judge a path, which should be considered unjust, to be unjust. Then another version of CLTS semantics for ABC is proposed. More detailed work can be found in \cite{vG18}.
+
+In \Sec{CCSp}, a short proposal of CLTS semantics for CCS$_P$ is shown, with out discussing much details.
+
+In \Sec{EXPR}, the expressiveness of the algebras ABC and CCS with 3 priorities is compared by first showing the semantics of CCS with 3 priorities, then giving an encoding from ABC to CCS$_P$, then proving that the encoding respects the criterion proposed in \cite{G10}.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Component-labelled Transition Systems} \label{sec:CLTS}
+
+In this section, some basics are presented, in particular (Component-)Labelled Transition System, component, and concurrency. The notations presented here are also used in the following sections.
+
+\begin{defi} [LTS]
+	A \emph{labelled transition system} (LTS) is a tuple \[(S, \Tr, \source,\target,\ell)\] with $S$ and $\Tr$ sets (of \emph{states} and \emph{transitions}), $\source,\target:\Tr\rightarrow S$ the source and target state of a transition, and $\ell:\Tr\rightarrow \Lab$ for some set of transition labels $\Lab$. Sometimes the \emph{labels} are also noted as \emph{actions}.
+\end{defi}
+
+\begin{defi} [Path]
+	A \emph{path} in a transition system $(S,\Tr,$ $\source,\target, \ell)$ is an alternating sequence \[ s_0\,t_1\,s_1\,t_2\,s_2\cdots\] of states and transitions, starting with a state and either being infinite or ending with a state, such that $\source(t_i)=s_{i-1}$ and $\target(t_i)=s_i$ for all relevant $i$. Sometimes a transition is represented as an arrow, with its label and $\src$, $\tgt$ sets on top of the arrow, like: $\ar{l(t)}$, for a transition $t$.
+\end{defi}
+
+\begin{defi} [CLTS]
+	A \emph{Component-Labelled Transition System} (CLTS) is a tuple $(TS,\C,\npc,\afc)$ with $TS = (S, \Tr,\source,\target,\ell)$ an LTS, $\C$ a set of \emph{components} and $\npc, \afc : \Tr \rightarrow \powset{\C}$ the mappings that associate each $t \in \Tr$ with sets of \emph{necessary} and \emph{affected} components, and the necessary components being a non-empty set.
+	We represent a transition $t \in \Tr$ and its $\src$ and $\tgt$ by
+	\begin{equation*}
+		\src(t) \ar{\ell(t), \npc(t), \afc(t)} \tgt(t).
+	\end{equation*}
+\end{defi}
+
+\begin{defi}[Well-colored Path]
+Let $Y \subseteq Act$ a set of actions (\textit{enabled actions}). A $Y$-well-colored path $\pi = s_1 \ar{\alpha_1, N_1, A_1}s_2 \ar{\alpha_2, N_2, A_2} ...$  is a path that has the following property :
+\[  \forall k, \forall \alpha \notin Y, \alpha \in \plat{Act}: (\text{if }\exists s_k \ar{\alpha, N, A} t  \text{ then }  \exists l \geq k, N \cap A_l  \neq \varnothing)  \]
+with the state $s_k$ and the transition $s_l \ar{\alpha_l, N_l, A_l}s_{l+1}$ on $\pi$, the transition $s_k \ar{\alpha, N, A} t$ not on $\pi$.
+We note $\mathcal{WC}(Y)$ as the set of $Y$-well-colored paths.
+\end{defi}
+
+Informally, a path is well-colored, means if an action is enabled (its execution is possible) by a state on the path, then there must be a transition on the path that affects this action, possibly labelled with this action itself.
+
+\begin{defi}[Concurrent]
+The transition $t \in \Tr$ is {concurrent} with $u \in \Tr$, notation $t \aconc u$, if $\npc(t) \cap \afc(u) = \emptyset$. We note $t \smile u$ iff $t \aconc u$ and $u \aconc t$.
+\end{defi}
+
+Informally, $t \aconc u$, means if we are in a state that both $t$ and $u$ are enabled, then the execution of $u$ does not affect the necessary environment that is needed for the execution of $t$. This leads to the following \emph{concurrency closure} property.
+
+\begin{defi}[Concurrency Closure]
+    If transitions $t \in \Tr $ such that $t \naconc t$\footnote{The condition that a transition is not concurrent with itself is designed to serve CCS with Signals, eliminating the case of signals, and is not very relevant for this report up to now. However, it could be considered to eliminate the influence of broadcasting actions ($\B!$ actions) in ABC as well.} and $u \in \tr$ satisfies $\src(t) = \src(u)$ and $t \aconc u$, then there is $v \in \Tr $ with $v \naconc v$, $\src(v) = \tgt(u)$, $l(v)=l(t)$, and $\npc(v) = \npc(t)$.
+\end{defi}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ABC}\label{sec:ABC}
+\subsection{Semantics of ABC}
+The Algebra of Broadcast Communication (ABC) is an extension of CCS, combined with features of CBS. The following syntax definition is directly taken from chapter 2 of \cite{vGH15}.
+
+The Algebra of Broadcast Communication (ABC) is parametrised with sets ${\A}$ of \emph{agent identifiers},
+$\B$ of \emph{broadcast names} and $\C$ of \emph{handshake communication names};
+each $\AI\in\A$ comes with a defining equation \plat{$\AI \stackrel{{\it def}}{=} P$}
+with $P$ being a guarded ABC expression as defined below.
+
+The collections $\B!$ and $\B?$ of \emph{broadcast} and \emph{receive}
+actions are given by $\B\sharp:=\{b\sharp \mid b\mathbin\in\B\}$ for $\sharp \in \{!,?\}$.
+The set $\bar{\C}$ of \emph{handshake communication co-names} is $\bar\C:=\{\bar{c} \mid c\in {\C}\}$,
+and
+the set $\HC$ of \emph{handshake actions} is
+\plat{$\HC:=\C \dcup \bar\C$}, the disjoint union of the names and co-names.
+The function
+$\bar{\rule{0pt}{7pt}.}$ is extended to $\HC$ by
+declaring $\bar{\bar{\mbox{$c$}}}=c$.
+
+Finally, \plat{$Act := \B! \dcup \B? \dcup \HC\dcup \{\tau\}$} is the set of \emph{actions}.
+Below, $\!\BI$, $\!\CI$ range over $\A\!$, $b$ over $\B$, $c$ over $\HC\!$,
+$\eta$ over $\HC\cup\{\tau\}$ and $\alpha, \ell$ over $Act$.
+A \emph{relabelling} is a function $f\!:(\B\mathbin\rightarrow \B) \cup (\C\mathbin\rightarrow \C)$.
+It extends to $Act$ by $f(\bar{c})\mathbin=\overline{f(c)}$, $f(b\sharp)\mathbin=f(b)\sharp$ and $f(\tau):=\tau$.
+The set $Ex_{\rm ABC}$ of ABC expressions is the smallest set including:
+
+\vspace{-1.2mm}
+\begin{center}
+\begin{tabular}{@{}l@{~~}l@{\qquad\quad}l@{~~}l@{\qquad\quad}l@{~~}l@{}}
+$\nil$ & \emph{inaction}&
+$\alpha.\E$  & \emph{prefixing}&
+$\E+\F$  & \emph{choice} \\
+$\E|\F$ & \emph{parallel composition}&
+$\E\backslash c$  & \emph{restriction} &
+$\E[f]$ &  \emph{relabelling} \\
+$\BI$ &  \emph{agent identifier} &\mylabel{exp}\\
+\end{tabular}
+\end{center}
+\vspace{-1.2mm}
+
+Losing the $\npc$, $\afc$ sets, the semantics of ABC is then shown in \tab{ABC}.
+
+
+\subsection{Semantics of ABC w.r.t. CLTS}
+
+\subsubsection{Semantics}
+We extend now the semantics of ABC w.r.t. CLTS in \tab{ABC}.
+
+The set of components $\Ce := \{L, R, \epsilon \} $, where $\epsilon$ means ``everything", and follows the rules: $\forall l \in \Ce$, $\forall N \subseteq \powset{\Ce}$,
+
+ \vspace{-1.2mm}
+ \begin{center}
+ \begin{tabular}{@{}l@{~~}l@{\qquad\quad}l@{~~}l@{\qquad\quad}l@{~~}l@{}}
+ $l.\epsilon = l$&
+ $\epsilon.l = l$\\
+ $N \cup \{\epsilon\} = \{\epsilon\}$ &
+ $N \cap \{\epsilon\} = N$\\
+ \end{tabular}
+ \end{center}
+
+
+\begin{table*}[t]
+\normalsize
+\centering
+\caption{Structural operational semantics of ABC w.r.t. CLTS}
+\label{tab:ABC}
+\framebox{
+$\begin{array}{@{}ccc@{}}
+\alpha.\E \ar{\alpha, \{\epsilon\}, \{\epsilon\}} \E  \mylabel{Act} &
+\displaystyle\frac{\E\ar{\alpha, N, A} \E'}{\E+\F \ar{\alpha, \{\epsilon\}, \{\epsilon\}} \E'}  \mylabel{Sum-l}&
+\displaystyle\frac{\F \ar{\alpha, N, A} \F'}{\E+\F \ar{\alpha, \{\epsilon\}, \{\epsilon\}} \F'}  \mylabel{Sum-r}
+\\[3ex]
+\displaystyle\frac{\E\ar{\eta, N, A} \E'}{\E|\F \ar{\eta, L.N, L.A} \E'|\F} \mylabel{Par-l}&
+\displaystyle\frac{\E\ar{c, N, A} \E' ,~ \F \ar{\bar{c}, Z, W} \F'}{\E|\F \ar{\tau, L.N \cup R.Z, L.A \cup R.W} \E'| \F'} \mylabel{Comm}&
+\displaystyle\frac{\F \ar{\eta, N, A} \F'}{\E|\F \ar{\eta, R.N, R.A} \E|\F'} \mylabel{Par-r}
+\\[3ex]
+\!\displaystyle\frac{\E\ar{b\sharp_1, N, A} \E' ,~ \F \nar{b?}}{\E|\F \ar{b\sharp_1, L.N, L.A} \E'| \F}  \mylabel{Bro-l}&
+\displaystyle\frac{\E\ar{b\sharp_1, N, A} \E' ,~ \F \ar{b\sharp_2, Z, W} \F'}{\E|\F \ar{b\sharp, L.N\cup R.Z, L.A\cup R.W} \E'| \F'} \mylabel{Bro-c} \\[3ex]
+\displaystyle\frac{\E\nar{b?} ,~ \F \ar{b\sharp_2, N, A} \F'}{\E|\F \ar{b\sharp_2,  R.N, \cup R.A} \E| \F'}  \mylabel{Bro-r}%\\[-5pt]
+& \scriptstyle \sharp_1\circ\sharp_2 = \sharp \neq \_ ~~\mbox{with}~~
+    \begin{array}{c@{\ }|@{\ }c@{\ \ }c}
+    \scriptstyle \circ & \scriptstyle ! & \scriptstyle ? \\
+    \hline
+    \scriptstyle ! & \scriptstyle \_ & \scriptstyle ! \\
+    \scriptstyle ?& \scriptstyle ! & \scriptstyle ? \\
+    \end{array}
+\\[1ex]
+\displaystyle\frac{\E \ar{\ell, N, A} \E'}{\E[f] \ar{f(\ell), N, A} \E'[f]} \mylabel{Rel}&
+\displaystyle\frac{\E \ar{\ell, N, A} \E'}{\E\backslash c \ar{\ell, N, A} \E'\backslash c}~(c\mathord{\neq}\ell\mathord{\neq}\bar{c}) \mylabel{Res}&
+\displaystyle\frac{\E \ar{\ell, N, A} \E'}{B\ar{\ell, N, A}\E'}~(B \mathord{\stackrel{{\it def}}{=}} P) \mylabel{Rec}
+\end{array}$}
+\end{table*}
+
+
+Now we proceed to concurrency closure property.
+
+\begin{prop}
+The component-labelled operational semantics of ABC respects the concurrency closure property.
+\end{prop}
+
+\begin{proof}
+We will prove by structural induction. Let $\alpha, \beta \in \plat{Act}$. Note that for every transition t $\in \Tr$, there is \npc(t) = \afc(t). Let there be transitions $t_1, t_2, t_3 \in \Tr$, $t_1 := P \ar{\alpha, X, X} P_1$, $t_2 := P \ar{\beta, Y, Y} P_2$, $t_3 := P_1 \ar{\beta, Y, Y} P_3$. $X \cap Y = \varnothing$ means $t_2\aconc t_1$. The progresses in ABC are constructed recursively from the expressions in \myref{exp}. Let the argument be $\delta(P)$: the process $P$ respects \emph{closure property}. Trivial case: $\delta(\nil)$ is true.
+
+
+Suppose $\delta(P)$ is true, we prove by induction that $\delta(S)$ is true, where $S$ is composed from $P$.
+
+\begin{itemize}
+	\item \textbf{Prefixing:} Suppose $S = \alpha.P$, the only possibility is that $X = Y = \{\epsilon\}$, so we cannot have $X \cap Y = \varnothing$, thus $\delta(S)$ is true.
+	\item \textbf{Choice:} Suppose $S = P+Q$, the only possibility is that $X = Y = \{\epsilon\}$, and $\delta(S)$ is true.
+	\item \textbf{Relabelling:} Suppose $S = P[f]$, our two transitions are $t_1 = P[f] \ar{f(\alpha), X, X} P_1[f]$, $t_2 = P[f] \ar{f(\ell), Y, Y} P_2[f]$ because $P \ar{\alpha, X, X} P_1, P \ar{\ell, Y, Y} P_2$. From $X \cap Y = \varnothing$ we have $P_1 \ar{\ell, Y, Y} P_3$, because of $\delta(P)$. Then we can compose a transition $P_1[f] \ar{\ell, Y, Y} P_3[f]$.
+	\item \textbf{Restriction:} Straightforward.
+	\item \textbf{Recursion:} Straightforward.
+	\item \textbf{Parallel composition:} Suppose $S = P|Q$, our two transitions are $t_1 = P|Q \ar{\alpha, X, X} P_1|Q_1$, $t_2 = P|Q \ar{\beta, Y, Y} P_2|Q_2$. The two transitions can take the form of \emph{handshake actions} or \emph{broadcast actions}, put together we have $6*6=36$ cases, but the proofs are rather similar. Now we illustrate the idea by proving some of the cases.
+
+	\begin{itemize}
+		\item \myref{Par-l} and \myref{Par-l} Suppose our two transitions are $P | Q \ar{a, L . X, L . X} P_1 | Q$ and $P | Q \ar{b, L . Y, L . Y} P_2 | Q$ ($a, b \in \HC$) because $P \ar{a, X, X} P_1$, $P \ar{b, Y, Y} P_2$. From $(L . X) \cap  (L . Y) = \varnothing$ we can easily derive that $X \cap Y = \varnothing$. Thus by induction we get a transition $P_1 \ar{b, Y, Y} P_3$, and finally we infer a transition $P_1 | Q \ar{b, L . Y,  L . Y} P_3 | Q$.
+		\item \myref{Bro-l} and \myref{Bro-l} Suppose our two transitions are $P | Q \ar{b\sharp_1, L . X, L . X} P_1 | Q$ and $P | Q \ar{d \sharp_2, L . Y,  L . Y} P_2 | Q$ ($b \sharp_1, d \sharp_2 \in \B\sharp$) because $P \ar{b \sharp_1, X, X} P_1$, $P \ar{d \sharp_2, Y, Y} P_2$, and $Q \nar {b?}$. From $ L . X \cap L . Y = \varnothing$ we can easily derive that $X \cap Y = \varnothing$. Thus by induction we get a transition $P_1 \ar{d\sharp_2, Y, Y} P_3$, and finally we infer a transition $P_1 | Q \ar{d \sharp_2,  L . Y, L . Y} P_3 | Q$.
+		\item \myref{Bro-l} and \myref{Bro-r} Suppose our two transitions are $P | Q \ar{b\sharp_1, L . X, L . X} P_1 | Q$ and $P | Q \ar{d \sharp_2, R . Y,  R . Y} P | Q_2$ ($b \sharp_1, d \sharp_2 \in \B\sharp$) because $P \ar{b \sharp_1, X, X} P_1$, $Q \ar{d \sharp_2, Y, Y} Q_2$, which means $Q \nar {b?}$, $P \nar {d?}$. Then we can easily compose a transition $P_1 | Q \ar{d \sharp_2,  R . Y, R . Y} P_3 | Q_2$, no matter if $P_1$ listens to $d$ or not.
+		\item \myref{Bro-c} and \myref{Bro-c} Suppose our two transitions are $P | Q \ar{b\sharp', X, X} P_1 | Q_1$ and $P | Q \ar{d \sharp'', Y, Y} P_2 | Q_2$ because $P \ar{b \sharp_1, U_1, U_1} P_1$, $Q \ar{b \sharp_2, V_1, V_1} Q_1$, $P \ar{d \sharp_3, U_2, U_2} P_2$, $Q \ar{d \sharp_4, V_2, V_2} Q_2$, and $\sharp' =  \sharp_1\circ\sharp_2 \neq -$, $\sharp'' =  \sharp_3\circ\sharp_4 \neq -$. Besides, we have $X =  L \cdot U_1 \cup R \cdot V_1$, $Y =  L \cdot U_2 \cup R \cdot V_2$. $X \cap Y = \varnothing$ implies that $U_1 \cap U_2 = V_1 \cap V_2 = \varnothing$ therefore by induction we get two transitions $P_1 \ar{d\sharp_3, U_2, U_2} P_3$ and $Q_1 \ar{d\sharp_4, V_2, V_2} Q_3$. Then we infer $P_1 | Q_1 \ar{d\sharp'', Y, Y} P_3 | Q_3$.
+	\end{itemize}
+
+\end{itemize}
+Because the correctness and completeness of structural induction, we have proven that the proposition is true for all processes $S$ in \emph{ABC}, and the CLTS semantics of ABC respects the closure property.
+\end{proof}
+
+\subsection{Justness}
+To measure justness, we define \textit{just paths} (by adjusting the classical definition) and \textit{well-colored paths}, and show that these two terms are equivalent. The former gives us a formal description, the latter provides us with sufficient tool to decide conveniently whether a path is just or not.
+
+First we adjust the classical definition of \textit{just paths} to ABC.
+\begin{defi}[Just paths of ABC w.r.t. CLTS]
+For $Y \subseteq \HC$\footnote{It can be considered whether to restrict Y as a subset of $\HC$ or define Y as a subset of $Act$, i.e. not ruling the set $\B!$ out.}, the set $\mathcal J(Y)$ of $Y$-just paths is the largest family of predicates such that:
+\begin{itemize}
+	\item A finite path is $Y$-just if it ends in a state that admits actions from $Y \cup \B?$ only.
+	\item If a path of a process $P | Q$ is $Y$-just, then it can be decomposed into a $Z$-just path of $P$ and a $Z'$-just path of $Q$ such that $Y \supseteq Z \cup Z'$ and $Z \cap \bar{Z'} = \varnothing$.
+	\item If a path of a process $P \backslash a$ is $Y$-just, then it can be decomposed into a $(Y \cup \{a, \bar a \})$-just path of $P$.
+	\item If a path of a process $P[f]$ is $Y$-just, then it can be decomposed into a $f^{-1}(Y)$-just path of $P$.
+	\item If a path of a process $P$ is $Y$-just and non-empty, then its suffix (the path obtained by removing the very first transition) is also $Y$-just.
+\end{itemize}
+Consequently, a path is just iff it is $\varnothing$-just.
+\end{defi}
+
+In the context of ABC, we should note that since Y-just paths are defined over the set Y which is a subset of $\HC$, the notation ``$Z$-just path" indicates that Z is also a subset of $\HC$.
+
+Also, the definition of well-colored paths does not suffice to characterize just-paths in ABC, thus we need to adjust the definition again. The reasons can be illustrated through the following example:
+
+\begin{exam}
+Consider the process P := a.A$|$b?.\nil, A := a.A, where $a \in \HC$, $b? \in \B?$. The path \footnote{Because the npc and afc sets are always the same in this version of CLTS semantics for ABC, we sometimes leave out the second set in the notation.} \[ P_1 \ar{a, \{L\}}P_2 \ar{a, \{L\}}P_3 \] should be characterized as $\{a\}$-just because the end state $P_3 = P$ admits actions from $\{a\} \cup \B?$ only.
+
+However, this path is not $\{a\}$-well-colored according to the definition above. A counterexample can be: \[\mbox{for } b? \notin \{a\}, \exists P_1 \ar{b?, \{R\} }P_2\mbox{, but } \nexists l > 1\mbox{, such that } N_l \cap  \{R\} = \varnothing \] as every $N_l$ is labeled with (a, \{L\}). Thus the well-coloration does not correspond to justness.
+As a result, we should take the set $\B?$ into consideration when adjusting the definition.
+\end{exam}
+
+\begin{defi}(Well-colored path w.r.t. ABC)
+Let $Y \subseteq  \HC$ a set of actions (\textit{enabled actions}). A $Y$-well-colored path $\eta = s_1 \ar{\alpha_1, N_1, A_1}s_2 \ar{\alpha_2, N_2, A_2} ...$  is a path that has the following property :
+\[  \forall k, \forall \alpha \notin (Y \cup \B?), \alpha \in \plat{Act}: (if \exists s_k \ar{\alpha, N, A} t  \Longrightarrow  \exists l \geq k, N \cap A_l   \neq \varnothing)  \]
+for $s_k$, $s_l \ar{\alpha_l, N_l, A_l}$ on $\pi$, $s_k \ar{\alpha, N, A} t$ not on $\pi$.
+We note $\mathcal{WC}(Y)$ as the set of $Y$-well-colored paths.
+\end{defi}
+
+Now we proceed to prove that these two definitions are equivalent. \footnote{The proof is almost identical with the proof in Victor(victor.dyseryn-fostier@polytechnique.edu)'s report, only adding some details.}
+\begin{prop}
+	A path in ABC(CLTS) is Y-just iff it is Y-well-colored, which means $\mathcal{WC}(Y) = \mathcal J(Y)$.
+\end{prop}
+
+\begin{proof}
+\underline{\emph{Part 1:} ``$\mathcal{WC}(Y) \subseteq \mathcal J(Y)$" }
+\begin{itemize}
+	\item All finite Y-well-colored path are also Y-just. Let $s_k$ be the end state, then we have the proof.
+	\item If a path of a process P$|$Q is Y-well-colored, then \mylabel{i}it can be decomposed into a $Z$-just path of $P$ and a $Z'$-just path of $Q$ such that \mylabel{ii}$Y \supseteq Z \cup Z'$ and \mylabel{iii}$Z \cap \bar{Z'} = \varnothing$.
+
+	Let the path be $\pi$, and its decomposition are $\pi_1$ and $\pi_2$, and
+	\[ \pi_1 = s_1 \ar{\alpha_1, N_1} s_2\ar{\alpha_2, N_2}... \]
+	\[ \pi_2 = s_1' \ar{\alpha_1', N_1'} s_2'\ar{\alpha_2', N_2'}...\]\footnote{Here we leave out the second sets again, for they are identical with the first sets.}
+	with $\alpha_i, \alpha_i' \in \textit{Act}$, $s_i|s_i'$ the states on $\pi$, $\forall i$. Note that, a transition on $\pi$ can take the form of interleaving, for example, in the case of left interleaving, $s_i|s_i'\ar{\alpha_i, X_i}s_{i+1}|s_{i+1}'$ is decomposed as $s_i \ar{\alpha_i, N_i} s_{i+1}$ on $\pi_1$, with $X_i=L.N_i$, and nothing on $\pi_2$. For the reason of symmetry, we note a transition $s_i' \ar{\lambda, N_i'} s_{i+1}'$ on $\pi_2$, where $N_i'=\varnothing$, $s_i' = s_{i+1}'$, and $\lambda \notin \textit{Act}$ a notation emphasizing that the transition does not really exist. Then we always have $X_i=L.N_i\cup R.N_i'$, because $R.\varnothing = \varnothing$. In case of right interleaving, our notation changes symmetrically.
+
+	Now we define two sets $Z$ and $Z'$, where $\HC \supseteq Z, Z'$,and show that $\pi_1$ is $Z$-well-colored and $\pi_2$ is $Z'$-well-colored. Let
+	\[ Z := \{ a \mid \exists k,\ s_k \ar{a, N} t \mbox{ and } \forall l \geq k, N_l \cap N = \varnothing \} \]
+	\[ Z' := \{ a \mid \exists k,\ s_k' \ar{a, N'}' t' \mbox{ and } \forall l \geq k, N_l' \cap N' = \varnothing \} \]
+
+	We can see easily from the definition that the path $\pi_1$ is $Z$-well-colored and $\pi_2$ is $Z'$-well-colored, as described in \myref{i}.
+
+	Now we prove that $Y \supseteq Z$ and $Y \supseteq Z'$.
+
+	\begin{itemize}
+		\item Assume $\exists a \in \HC$ such that $a \in Z \backslash Y$. Then we have a transition in $\pi$ starting from a state $s_k$ on $\pi$, composed from the corresponding transitions starting with states in $\pi_1$ and $\pi_2$:
+		\[s_k | s_k' \ar{a, L.N} t|s_k'\]
+		where $\forall l>k,  N_l \cap N = \varnothing $ because $a \in Z$, and $\exists l>k,  X_l \cap L.N  \neq \varnothing $, $X_l=L.N_l\cup R.N_l'$, because $a \notin Y$. Then we have $ (L.N_l\cup R.N_l') \cap L.N  \neq \varnothing $, thus $( L.N_l\cap L.N)\cup (R.N_l'\cap L.N)  \neq \varnothing $, and $( L.N_l\cap L.N) \neq \varnothing $, then $(N_l\cap N) \neq \varnothing $, which leads to contradiction. Thus $\nexists a \in Z \backslash Y$, which means $Y \supseteq Z$.
+		\item Analogically we can prove that $Y \supseteq Z'$.
+	\end{itemize}
+
+	Then we can have $Y \supseteq Z \cup Z'$, and \myref{ii} is proven.
+
+	Now we proceed to prove $Z \cap \bar{Z'} = \varnothing$.
+
+	Assume we have a $c \in Z \cap \bar{Z'}$, which means $\exists s_m \ar{c, N} t$, $\forall l \geq m$, $N_l\cap N = \varnothing$, and $\exists s_n' \ar{\bar{c}, N'} t'$, $\forall l \geq n$, $N_l'\cap N'= \varnothing$. Without losing generality, we can assume that $m \leq n$. Because of concurrency closure, we have a transition  $s_n \ar{c, N} r$, $\forall l \geq n$, $N_l\cap N= \varnothing$. Then we can compose a transition  $s_n | s_n' \ar{\tau, L.N \cup R.N'} r|t$, $\forall l \geq n$, $N_l\cap N= \varnothing$ and $N_l'\cap N' = \varnothing$ with $s_n | s_n'$ on $\pi$.
+
+	Because $\tau \notin Y$, $\exists h \geq n$, $X_h \cap (L.N \cup R.N')\neq \varnothing$, $X_h=L.N_h\cup R.N_h'$. Therefore we have $(L.N_h \cap L.N) \cup (L.N_h \cap R.N') \cup (R.N_h' \cap L.N) \cup (R.N_h' \cap R.N') \neq \varnothing$, which again leads to contradiction. Thus $\nexists c$, and $Z \cap \bar{Z'} = \varnothing$, \myref{iii} is proven.
+
+	\item  If a path of a process $P \backslash a$ is $Y$-well-colored, then it can be decomposed into a $(Y \cup \{a, \bar a \})$-well-colored path of $P$. A decomposition of a transition $P \backslash a \ar{b, N} P' \backslash a$ is the transition $P \ar{b, N} P'$ where $b \neq a \neq \overline{a}$. Let the path be $\pi$, and its decomposition be $\pi'$. We note the paths as:
+	\[ \pi := s_1 \backslash a \ar{b_1, N_1} s_2 \backslash a \ar{b_2, N_2} s_3 \backslash a ...\]
+	\[ \pi' := s_1 \ar{b_1, N_1} s_2 \ar{b_2, N_2} s_3 ...\]
+	$\forall c \notin Y \cup \{ a, \overline{a}\}$, such that $\exists s_k \ar{c, N} t$, because $c \neq a \neq \overline{a}$, there exists a transition $ s_k \backslash a \ar{c, N} t$. And because $c \notin Y$, there exists a transition $s_l \backslash a \ar{b_l, N_l} s_{l+1} \backslash a, l \geq k$, such that $N_l \cap N \neq \varnothing$, because $\pi$ is $Y$-well-colored. Then we can decompose the transition into $s_l  \ar{b_l, N_l} s_{l+1}$, $l \geq k$, $N_l \cap N \neq \varnothing$. Then we have proven that $\pi'$ is $Y \cup \{ a, \overline{a}\}$-well-colored.
+
+	\item If a path of a process $P[f]$ is $Y$-well-colored, then it can be decomposed into a $f^{-1}(Y)$-well-colored path of $P$. Let the paths be:
+	\[ \pi := s_1 \ar{\alpha_1, N_1} s_2 \ar{\alpha_2, N_2} s_3 ...\]
+	\[ \pi' := s_1^{-1}[f] \ar{f^{-1}(\alpha_1), N_1} s_2^{-1}[f] \ar{f^{-1}(\alpha_2), N_2} s_3^{-1}[f] ...\]
+	Because of the semantics of relabelling, we can transform the conditions
+	\[\forall c \notin Y\text{, such that } \exists s_k \ar{c, N} t\text{, then }\exists s_l \ar{\alpha_l, N_l} s_{l+1}, l \geq k \] into
+	\[\forall c \notin Y^{-1}[f]\text{, such that }  \exists s_k^{-1}[f] \ar{c, N} t\text{, then } \exists s_l^{-1}[f] \ar{f^{-1}(\alpha_l), N_l} s_{l+1}^{-1}[f], l \geq k\]
+	Thus we have that $\pi'$ is  $f^{-1}(Y)$-well-colored.
+
+	\item If a path of a process $P$ is $Y$-well-colored and non-empty, then its suffix (the path obtained by removing the very first transition) is also $Y$-well-colored.
+	The definition gives immediately that if a path is $Y$-well-colored and non-empty, then its suffix is $Y$-well-colored.
+
+\end{itemize}
+
+\underline{\emph{Part 2:} ``$\mathcal{J}(Y) \subseteq \mathcal {WC}(Y)$" } (By induction.)
+
+We write that a transition is of depth $M$ when it applies $M$-times the rules in \tab{ABC}. For example, $a.\nil \ar{a, \{\epsilon\}} \nil$ has depth 0, $(a.P |b.Q) | c.R \ar{a, \{LL\}} (P |b.Q) | c.R$ has depth 2, because:
+\[\frac{\frac{a.P\ar{a, \{\epsilon\}} P}{a.P |b.Q \ar{a, \{L\}} P |b.Q}}{(a.P |b.Q) | c.R \ar{a, \{LL\}} (P |b.Q) | c.R}\]
+
+Let property $\P(M)$ ($M \in \mathbb N$) be: $\forall Y \in \HC$, for all $Y$-just paths $\pi = s_1 \ar{\alpha_1, N_1} s_2 \ar{\alpha_2, N_2} ...$, $\forall k$, $\forall \alpha \notin (Y \cup \B?)$, if $\exists s_k \ar{\alpha, N} t$ of depth $\leq M$, then $\exists l \geq k$ such that $N_l \cap N \neq \varnothing$.
+
+Note that $s_k$ cannot be the end state. Assume $s_k$ is the end state, then we cannot have such transition $s_k \ar{\alpha, N} t$ because $\pi$ is $Y$-just and $\alpha \notin Y$.
+
+\begin{itemize}
+		\item $\P(0)$ is true. If $\exists s_k \ar{\alpha, N} t$ of depth 0, then it is only possible that $s_k$ is in the form $\alpha.P$, where P is a process. Then $s_k$ is the only possible process outgoing from $s_k$, and therefore $s_k \ar{\alpha, N} t$ must be on $\pi$. And it contradicts with the condition that $s_k \ar{\alpha, N} t$ not on $\pi$.
+
+		\item If $\P(M)$ is true then $\P(M+1)$ is true. We now focus on the property $\P(M+1)$ and analyse the cases of different derivations from \tab{ABC}.
+		\begin{itemize}
+			\item \myref{Sum-l}, \myref{Sum-r} $s_k = P_1 +P_2$, then we have $N = \{\epsilon\}$ and $N \cap N_l = N_l \neq \varnothing$, because in ABC, the \emph{npc}, \emph{afc} sets are always non-empty.
+			\item \myref{Par-l} Suppose $s_k = P| P'$, $t = R|P'$ and $N = L.U$ because $P \ar{a, U} R$. We decompose the path starting from $s_k$: $s_k = P| P' \ar{a_k, N_k} s_{k+1} ...$, which is $Y$-just, into two paths: $\eta = P \ar{b_k, U_k} ...$ and $\eta' = P' \ar{b_k', U_k'} ...$ which are respectively $Z$ and $Z'$-just such that $Z \cup Z' \subseteq Y$ and $Z \cap \bar{Z'} = \varnothing$. $\eta$ is a $Z$-just path, $a \notin Z$ because $a \notin Y$ and $Z \subseteq Y$, and the transition $P \ar{a, U} R$ is of depth $M$ so by $\P(M)$ there exists $l \geq k$ such that $U_l \cap U \neq \varnothing$. As a result $L.U_l \cap L.U \neq \varnothing$ and since $L.U_l \subseteq N_l$ and $N = L.U$, $N_l \cap N \neq \varnothing$.
+			\item \myref{Par-r}, \myref{Comm}, \myref{Bro-l}, \myref{Bro-r}, \myref{Bro-c} Similar to \myref{Par-l}.
+			\item \myref{Rec} Suppose $s_k = A := P$ and the transition $s_k \ar{\alpha, N} t$ has depth $m+1 \leq M+1$, then the transition $P \ar{\alpha, N} t$ has depth $m \leq M$. Replacing $s_k$ with $P$ we acquire a path $\pi'$, which is also $Y$-just. Because $\P(M)$ is true, we have an $l\geq k$ on $\pi'$ such that $N_l \cap N \neq \varnothing$. It is obvious that $s_l \ar{\alpha_l, N_l} s_{l+1}$ is also on $\pi$, thus $\P(M+1)$ is also true.
+			\item \myref{Res} Similar to \myref{Rec}.
+			\item \myref{Rel} Suppose $s_k = P[f]$ for a relabelling function $f$ and a process $P$. The transition $P[f] \ar{f(\alpha), N} t[f]$ has depth $m+1 \leq M+1$, then the transition $P \ar{\alpha, N} t$ has depth $m \leq M$. We decompose again the path starting from $s_k$, and like before, we can find a transition that is not concurrent to $s_k \ar{\alpha, N} t$, thus the corresponding transition is not concurrent to $P[f] \ar{f(\alpha), N} t[f]$.
+		\end{itemize}
+
+\end{itemize}
+
+Because of the correctness and completeness of induction, the property $\P(M)$ is true for all $M \in \mathbb N$, and we have $\mathcal{J}(Y) = \mathcal {WC}(Y)$.
+
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Another proposal: CLTS for ABC}\label{sec:aABC}
+In this section, we first explain a counterexample that shows the inadequacy with respect to justness of the CLTS proposed above, then propose another version of CLTS for ABC.
+
+\begin{exam}
+Consider the process $P:=b!.\nil|b?.\nil + X$ where $X := \tau.X$. Then we can compose a path according to \Sec{ABC}:
+\[ P \ar{\tau, \{R\}, \{R\}}P \ar{\tau, \{R\}, \{R\}}P \ar{\tau, \{R\}, \{R\}}P \ar{\tau, \{R\}, \{R\}}\cdots \]
+where $P$ continues doing $\tau$-loop and returning to the initial state.
+\end{exam}
+
+This path would be considered just because each of the transitions effect the components that is necessary for the execution of $b!$, which is $\{L, R\}$. However, this path should not be considered as just, because the parallel component $b!.\nil$ is enabled at each state, and yet never executed, which contradicts to the fact that a $\B!$ action should be non-blocking. Also, it should be considered just according to Appendix C in \cite{vGH15}.
+
+For the purpose of solving this problem, we propose another approach of defining CLTS semantics for ABC. For more please refer to \cite{vG18}.
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{CCS with priority}\label{sec:CCSp}
+CCS with priority(CCS$_P$) is an extension of CCS, assigning each action (label in LTS) with a certain priority. CCS$_P$ can be useful, for example, when building systems containing components that has interrupting power, for example the occurrence of an error.
+
+We start with CCS with two priorities. It is argued in \cite{CH90} that the two priorities can be easily extended to discrete priorities. The basic idea is: actions with high priority cannot be preempted by other actions, while actions with low priority can be preempted by silent(internal) action with high priority. As usual, we define the following notations:
+
+$CCS_P$ is parametrised with sets ${\A}$ of \emph{agent identifiers},
+$\C_l$ of \emph{communication names with low priority}, $\C_h$ of \emph{communication names with high priority};
+each $\AI\in\A$ comes with a defining equation \plat{$\AI \stackrel{{\it def}}{=} P$}
+with $P$ being a guarded $CCS_P$ expression as defined below.
+
+The set $\HC_l$ of \emph{handshake actions with low priority} is
+\plat{$\HC_l:=\C_l \dcup \bar\C_l$}, $\HC_h$ of \emph{handshake actions with high priority} is
+\plat{$\HC_h:=\C_h \dcup \bar\C_h$}, the disjoint union of the names and co-names.
+The function
+$\bar{\rule{0pt}{7pt}.}$ is extended to $\HC_l$ and $\HC_h$ by
+declaring $\bar{\bar{\mbox{$c$}}}=c$ for c$\in \C_l$ or c$\in\C_h$.
+
+Finally, \plat{$Act := \HC_l \dcup \HC_h \dcup \{\tau\} \dcup \{\underline{\tau}\} $}
+is the set of \emph{actions} where $\underline{\tau}$ is the silent action with high priority.
+Below, $\!\BI$, $\!\CI$ range over $\A\!$, $a$ over $\HC_l\! \cup \{\tau\}$, $c$ over $\HC_l\!$, $\underline{a}$ over $\HC_h\! \cup \{\underline{\tau}\}$, $\underline{c}$ over $\HC_h\!$ and $\alpha, \ell$ over $Act$.
+A \emph{relabelling} is a function $f\!:(\C_l\mathbin\rightarrow \C_l) \cup (\C_h\mathbin\rightarrow \C_h)$.
+It extends to $Act$ by $f(\bar{c})\mathbin=\overline{f(c)}$, and $f(\tau):=\tau$, $f(\underline{\tau}):=\underline{\tau}$.
+The set $S_{\rm CCS_P}$ (\emph{State}) of $CCS_P$ expressions is the smallest set including:
+
+\vspace{-1.2mm}
+\begin{center}
+\begin{tabular}{@{}l@{~~}l@{\qquad\quad}l@{~~}l@{\qquad\quad}l@{~~}l@{}}
+$\nil$ & \emph{inaction}&
+$\alpha.\E$  & \emph{prefixing}&
+$\E+\F$  & \emph{choice} \\
+$\E|\F$ & \emph{parallel composition}&
+$\E\backslash c$  & \emph{restriction} &
+$\E[f]$ &  \emph{relabelling} \\
+$\AI$ &  \emph{agent identifier}\\
+\end{tabular}
+\end{center}
+\vspace{-1.2mm}
+
+We note $S_p \subseteq S_{\rm ABC}$ as the set of \emph{patient} \emph{processes} (\emph{states}). A process is \emph{patient} if it does not do \emph{internal action with high priority}. Formally, $P \in S_p$ iff
+\[\forall \alpha \text{ such that }\exists P\ar{\alpha} P' \text{, } \{\alpha\} \cap \{\underline{\tau}\} = \varnothing\]
+
+The semantics of $CCS_P$ is defined as in \tab{CCSP}. It is equivalent as in \cite{CH90}, but defined in one stage instead of two stages, and negative premises are avoided.
+
+
+\begin{table*}[t]
+\normalsize
+\centering
+\caption{Structural operational semantics of CCS$_P$}
+\label{tab:CCSP}
+\framebox{
+$\begin{array}{@{}ccc@{}}
+\alpha.\E \ar{\alpha} \E  \mylabel{act}
+\\[3ex]
+\displaystyle\frac{\E \ar{\underline{a}} \E'}{\E+\F \ar{\underline{a}} \E'}  \mylabel{sum-lh}&
+\displaystyle\frac{\F \ar{\underline{a}} \F'}{\E+\F \ar{\underline{a}} \F'}  \mylabel{sum-rh}
+\\[3ex]
+\displaystyle\frac{\E \ar{{a}} \E',\ \F \in S_p}{\E+\F \ar{{a}} \E'}  \mylabel{sum-ll}&
+\displaystyle\frac{\F \ar{{a}} \F',\ \E \in S_p}{\E+\F \ar{{a}} \F'}  \mylabel{sum-rl}
+\\[3ex]
+\displaystyle\frac{\E\ar{\underline{a}} \E'}{\E|\F \ar{\underline{a}} \E'|\F} \mylabel{par-lh}&
+\displaystyle\frac{\F\ar{\underline{a}} \F'}{\E|\F \ar{\underline{a}} \E|\F'} \mylabel{par-rh}
+\\[3ex]
+\displaystyle\frac{\E\ar{{a}} \E',\ \F \in S_p}{\E|\F \ar{{a}} \E'|\F} \mylabel{par-ll}&
+\displaystyle\frac{\F\ar{{a}} \F',\ \E \in S_p}{\E|\F \ar{{a}} \E|\F'} \mylabel{par-rl}
+\\[3ex]
+\displaystyle\frac{\E\ar{\underline{c}} \E', ~\F \ar{\bar{\underline{c}}} \F'}{\E|\F \ar{\underline{\tau}} \E'| \F'} \mylabel{comm-h}&
+\displaystyle\frac{\E\ar{{c}} \E', ~\F \ar{\bar{{c}}} \F',\ \E|\F \in S_p}{\E|\F \ar{{\tau}} \E'| \F'} \mylabel{comm-l}
+\\[3ex]
+\displaystyle\frac{\E \ar{\ell} \E'}{\E[f] \ar{f(\ell)} \E'[f]} \mylabel{rel}&
+\displaystyle\frac{\E \ar{\ell} \E'}{\E\backslash c \ar{\ell} \E'\backslash c}~(c\mathord{\neq}\ell\mathord{\neq}\bar{c}) \mylabel{res}&
+\displaystyle\frac{\E \ar{\ell} \E'}{B\ar{\ell}\E'}~(B \mathord{\stackrel{{\it def}}{=}} P) \mylabel{rec}
+\end{array}$}
+\end{table*}
+
+
+
+Adding \emph{component} to the semantics, we have \tab{CCSPc}.
+
+\begin{table*}[t]
+\normalsize
+\centering
+\caption{Structural operational semantics of CCS$_P$ w.r.t. CLTS}
+\label{tab:CCSPc}
+\framebox{
+$\begin{array}{@{}ccc@{}}
+\alpha.\E \ar{\alpha, \{\epsilon\}, \{\epsilon\}} \E  \mylabel{ACT}
+\\[3ex]
+\displaystyle\frac{\E \ar{\underline{a}, N, A} \E'}{\E+\F \ar{\underline{a}, \{\epsilon\}, \{\epsilon\}} \E'}  \mylabel{Sum-lh}&
+\displaystyle\frac{\F \ar{\underline{a}, N, A} \F'}{\E+\F \ar{\underline{a}, \{\epsilon\}, \{\epsilon\}} \F'}  \mylabel{Sum-rh}
+\\[3ex]
+\displaystyle\frac{\E \ar{{a}, N, A} \E',\ \F \in S_p}{\E+\F \ar{{a}, \{\epsilon\}, \{\epsilon\}} \E'}  \mylabel{Sum-ll}&
+\displaystyle\frac{\F \ar{{a}, N, A} \F',\ \E \in S_p}{\E+\F \ar{{a}, \{\epsilon\}, \{\epsilon\}} \F'}  \mylabel{Sum-rl}
+\\[3ex]
+\displaystyle\frac{\E\ar{\underline{a}, N, A} \E'}{\E|\F \ar{\underline{a}, L.N, L.A} \E'|\F} \mylabel{Par-lh}&
+\displaystyle\frac{\F\ar{\underline{a}, N, A} \F'}{\E|\F \ar{\underline{a}, R.N, R.A} \E|\F'} \mylabel{Par-rh}
+\\[3ex]
+\displaystyle\frac{\E\ar{{a}, N, A} \E',\ \F \in S_p}{\E|\F \ar{{a}, L.N, L.A} \E'|\F} \mylabel{Par-ll}&
+\displaystyle\frac{\F\ar{{a}, N, A} \F',\ \E \in S_p}{\E|\F \ar{{a}, R.N, R.A} \E|\F'} \mylabel{Par-rl}
+\\[3ex]
+\displaystyle\frac{\E\ar{\underline{c}, N, A} \E', ~\F \ar{\bar{\underline{c}}, Z, W} \F'}{\E|\F \ar{\underline{\tau}, L.N \cup R.Z, L.A \cup R.W} \E'| \F'} \mylabel{Comm-h}&
+\displaystyle\frac{\E\ar{{c}, N, A} \E', ~\F \ar{\bar{{c}}, Z, W} \F',\ \E|\F \in S_p}{\E|\F \ar{{\tau}, L.N \cup R.Z, L.A \cup R.W} \E'| \F'} \mylabel{Comm-l}
+\\[3ex]
+\displaystyle\frac{\E \ar{\ell, N, A} \E'}{\E[f] \ar{f(\ell), N, A} \E'[f]} \mylabel{REL}&
+\displaystyle\frac{\E \ar{\ell, N, A} \E'}{\E\backslash c \ar{\ell, N, A} \E'\backslash c}~(c\mathord{\neq}\ell\mathord{\neq}\bar{c}) \mylabel{RES}&
+\displaystyle\frac{\E \ar{\ell, N, A} \E'}{B\ar{\ell, N, A}\E'}~(B \mathord{\stackrel{{\it def}}{=}} P) \mylabel{REC}
+\end{array}$}
+\end{table*}
+
+\begin{prop}
+The component-labelled operational semantics of $CCS_P$ respects the concurrency closure property.
+\end{prop}
+
+\begin{proof}
+	Similar like in \Sec{ABC}.
+\end{proof}
+
+\begin{defi}[Just paths of $CCS_P$ w.r.t. CLTS]
+For $Y \subseteq (\HC_l \cup \HC_h)$, the set $\mathcal J(Y)$ of $Y$-just paths is the largest family of predicates such that:
+\begin{itemize}
+	\item A finite path is $Y$-just if it ends in a state that admits actions from $Y$ only.
+	\item If a path of a process $P | Q$ is $Y$-just, then it can be decomposed into a $Z$-just path of $P$ and a $Z'$-just path of $Q$ such that $Y \supseteq Z \cup Z'$ and $Z \cap \bar{Z'} = \varnothing$.
+	\item If a path of a process $P \backslash a$ is $Y$-just, then it can be decomposed into a $(Y \cup \{a, \bar a \})$-just path of $P$.
+	\item If a path of a process $P[f]$ is $Y$-just, then it can be decomposed into a $f^{-1}(Y)$-just path of $P$.
+	\item If a path of a process $P$ is $Y$-just and non-empty, then its suffix (the path obtained by removing the very first transition) is also $Y$-just.
+\end{itemize}
+Consequently, a path is just iff it is $\varnothing$-just.
+\end{defi}
+
+\begin{defi}(Well-colored path w.r.t. $CCS_P$)
+Let $Y \subseteq  (\HC_l \cup \HC_h)$ a set of actions (\textit{enabled actions}). A $Y$-well-colored path $\eta = s_1 \ar{\alpha_1, N_1, A_1}s_2 \ar{\alpha_2, N_2, A_2} ...$  is a path that has the following property :
+\[  \forall k, \forall \alpha \notin Y, \alpha \in \plat{Act}: (if \exists s_k \ar{\alpha, N, A} t  \Longrightarrow  \exists l \geq k, N \cap A_l  \neq \varnothing)  \]
+for $s_k, s_l \ar{\alpha_l, N_l, A_l}$ on $\pi$, $s_k \ar{\alpha, N, A} t$ not on $\pi$.
+We note $\mathcal{WC}(Y)$ as the set of $Y$-well-colored paths.
+\end{defi}
+
+\begin{prop}
+	A path in ABC(CLTS) is Y-just iff it is Y-well-colored, which means $\mathcal{WC}(Y) = \mathcal J(Y)$.
+\end{prop}
+
+\begin{proof}
+		Similar like in \Sec{ABC}.
+\end{proof}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Expressiveness of ABC and CCS with 3 Priorities}\label{sec:EXPR}
+In this section, we compare the relative expressiveness of the process algebras ABC and CCS with 3 Priorities, using criteria proposed in \cite{G10}. We start with comparing ABC and CCS with 3 priorities, finding an encoding from ABC to CCS with 3 Priorities that respects the encodability criteria, then prove by separation results that there is no suitable encoding from CCS with 3 Priorities to ABC.
+
+We expand now CCS with 3 Priorities introduced in \Sec{CCSp} with another priority, namely \emph{medium}. Now the operational semantics change as follows: informally, a process can execute an action with \emph{low} priority, when the process does no silent action with \emph{medium} or \emph{high} priority; a process can execute an action with \emph{medium} priority, when the process does no silent action with \emph{high} priority; actions with \emph{high} priority will not be preempted by any \emph{silent actions}. The \emph{Structural Operation Semantics} of this process algebra can be easily acquired by extending \tab{CCSPc}.
+
+Let $Act_{ABC}$ be the set of labels of \emph{ABC}, $Act_{CCS_P}$ the set of labels in CCS with 3 Priorities, $\C_m$ the set of \emph{communication names} with \emph{medium} priority, $\HC_m := \C_m \dcup \bar\C_m$, $Act := \HC_l \dcup \HC_m \dcup \HC_h \dcup \{\tau_l\} \dcup \{\tau_m\} \dcup \{\tau_h\}$. $\tau_l$, $\tau_m$, $\tau_h$ are the silent actions with \emph{low}, \emph{medium}, and \emph{high} priority, respectfully.
+
+Below, $a_l$ over $\HC_l\! \cup \{\tau_l\}$, $c_l$ over $\HC_l\!$, $a_m$ over $\HC_m\! \cup \{\tau_m\}$, $c_m$ over $\HC_m\!$, $a_h$ over $\HC_h\! \cup \{\underline{\tau_h}\}$, $c_h$ over $\HC_h\!$ and $\alpha, \ell$ over $Act$, $\tau \in \{\tau_l, \tau_m, \tau_h\}$. The other notations are the same as in \Sec{CCSp}.
+
+\subsection{Encode ABC to CCS$_P$}
+The following encoding is proposed by Johannes \AA man Pohjola\footnote{Johannes.Amanpohjola@data61.csiro.au}.
+
+The injective function $i$: $Act_{ABC} \to A_{CCS_P}$ is a mapping of actions in ABC to names in $CCS_P$, trivially,
+\[ i(\nil)=\nil \text{, } i(\bar{\eta}) = \overline{i(\eta)} (\eta \in \HC)\text{, }i(\tau)=\tau\]
+and priorities are assigned for each $i(\cdot)$ by suffixes.
+
+$\bkt{\cdot}$: $S_{ABC} \to S_{CCS_P}$ is the encoding from ABC to $CCS_P$, $P, Q \in S_{ABC}$. The encoding is as follows:
+
+$\bkt{b!.P} := \tau_l.(\overline{i(b?)}_h.X + \tau_m.\bkt{P})$ where $X:=i(b?)_h.X + \tau_m.\bkt{P}$;
+
+$\bkt{b?.P} := i(b?)_h.\tau_m.\bkt{P}$;
+
+$\bkt{\eta.P} := i(\eta)_l. \bkt{P}$;
+
+$\bkt{P|Q} := \bkt{P} | \bkt{Q}$;
+
+$\bkt{P+Q} := \bkt{P} + \bkt{Q}$;
+
+\footnote{Is it necessary to encode \emph{relabelling}, \emph{restriction}, \emph{recursion}?}
+
+\subsection{Adequacy of the Encoding}
+Now we prove that the encoding respects the following criteria, we only give the definitions of the criteria here, for more details, please refer to \cite{G10}.
+
+Let $L_1$, $L_2$ be calculi, $S$, $S_1$, $\dots$, $S_k$ be subterms, $N$ the set of \emph{names}, $F_N$ be \emph{free names} of the subterms, $\sigma$ a subsititution of names for names, $\varphi_{\bkt{}}$ a renaming policy, $\asymp$ a behavioral equivalence, $\Mapsto$ the reflexive and transitive closure of $\ar{\alpha}$ where $\alpha = \tau$ if the transition is in CCS$_P$, or $\alpha$ is a silent or broadcast action if the transition is an ABC transition. The suffixes $_1$ and $_2$ assigns each relation to ABC or CCS$_P$.
+
+\subsubsection{Compositionality}
+\begin{ppt}[Compositionality]
+	A translation $\bkt{\cdot}: L_1 \to L_2$ is compositional if, for every $k$-ary operator $op$ of $L_1$ and for every subset of names $N$, there exists a $k$-ary context $C_{op}^N(\underline{\ \ }_1;\dots;\underline{\ \ }_k)$ such that, for all $S_1, \dots, S_k$ with $F_N(S_1, \dots, S_k) = N$, it holds that $\bkt{op(S_1, \dots, S_k)} = C_{op}^N(\bkt{S_1}; \dots; \bkt{S_k})$.
+\end{ppt}
+
+\begin{proof}
+	The compositionality guarantees that the translation of a compound term must be defined in terms of the translation of the subterms, in which way our encoding is defined.
+\end{proof}
+
+\subsubsection{Name invariance}
+\begin{ppt}[Name invariance]
+	A translation $\bkt{\cdot}: L_1 \to L_2$ is name invariant if, for every S and $\sigma$, it holds that
+	\[ \bkt{S\sigma} \begin{cases} = \bkt{S}\sigma' & \text{ if } \sigma \text{ is injective} \\
+	\asymp_2 \bkt{S}\sigma' & \text{otherwise} \end{cases}\]
+	Where $\sigma'$ is such that $\varphi_{\bkt{}}(\sigma(a)) = \sigma'(\varphi_{\bkt{a}})$ for every $a \in N$.
+\end{ppt}
+
+\begin{proof}
+	Naturally, because the encoding does no name variations.
+\end{proof}
+
+\subsubsection{Operational correspondence}
+\begin{ppt}[Operational correspondence]A translation $\bkt{\cdot}: L_1 \to L_2$ is operational correspondent if it is
+	\begin{itemize}
+		\item \mylabel{Complete}: for all $S\Longmapsto_1S'$, it holds that $\bkt{S}\Longmapsto_2\asymp_2\bkt{S'}$;
+		\item \mylabel{Sound}: for all $\bkt{S}\Longmapsto_2T$, there exists an $S'$ such that $S\Longmapsto_1S'$ and $T\Longmapsto_2\asymp_2\bkt{S'}$.
+	\end{itemize}
+\end{ppt}
+
+\begin{prop}
+	The encoding from ABC to CCS$_P$ respects operational correspondence property up to \emph{strong bisimulation}.
+\end{prop}
+
+\begin{defi}[Strong bisimulation]
+	We note $s_1 \in LTS_1$, $s_2 \in LTS_2$, $\alpha \in Act$.
+
+	A relation $\B\subseteq (LTS_1 \times LTS_2 \cup LTS_2 \times LTS_1)$ is a \emph{strong bisimulation} if:
+	\begin{enumerate}
+		\item[i)] For all $s_1 \B s_2$, for all $\alpha$ such that $s_1 \ar{\alpha} s_1'$, there exists $s_2 \ar{\alpha} s_2'$ such that $s_1 \B s_2$.
+		\item[ii)]$\B$ is symmetric.
+	\end{enumerate}
+\end{defi}
+
+\emph{Strong bisimulation} is congruent to all the operators in ABC and $CCS_P$. We note $s_1 \asymp s_2$ if there exists a strong bisimulation $\B$ such that $s_1 \B s_2$
+
+Obviously, the encoding respects the \myref{Complete} property if $S = S'$, because the relation $\Longmapsto$ is reflexive. Then we only need to discuss the case where $S \neq S'$. In this subsection, we always denote $\to_1$ as transitions that are labelled with \emph{silent} or \emph{broadcast} actions, and $\to_2$ as labelled with \emph{silent} actions.
+
+To make the proof more clear, we need to first build some lemmas and prove them to be true.
+
+\begin{lemm}\label{lem:comp}
+	For all $S\to_1S'$, it holds that $\bkt{S}\Longmapsto_2\asymp_2\bkt{S'}$.
+\end{lemm}
+	Its proof comes later. This lemma helps us simplify the cases how $S'$ is reached from $S$, reducing to only one transition.
+
+\begin{lemm} \label{lem:Comp}
+	The encoding from ABC to $CCS_P$ respects \myref{Complete} property up to \emph{strong bisimulation} if \lem{comp} is proven.
+\end{lemm}
+
+\begin{proof}
+	Suppose \lem{comp} is true, $S\Longmapsto_1S'$ through the path
+	\[S\ar{\alpha_1}s_1\ar{\alpha_2}s_2\ar{\alpha_3}\cdots\ar{\alpha_n}S'\]
+	where $s_i$ are all ABC processes, and $\alpha_i$ are all \emph{silent} or \emph{broadcast} actions, for relevant $i \in \IN$. Because of \lem{comp} we have $\bkt{S}\Longmapsto_2 t_1$, where $t_1$ is strongly bisimilar to $\bkt{s_1}$. Because $s_1\ar{\alpha_2}s_2$, we have $\bkt{s_1}\Longmapsto_2 t_2$, where $t_2$ is strongly bisimilar to $\bkt{s_2}$. Because $t_1\asymp_2\bkt{s_1}$, we have $t_1 \Longmapsto_2 t_2$ due to bisimulation.
+	Like this, we can construct a path
+	\[\bkt{S}\Longmapsto_2t_1\Longmapsto_2t_2\Longmapsto_2\cdots\Longmapsto_2T\]
+	where $t_i \asymp_2 \bkt{s_i}$ for all relevant $i$, and $T \asymp_2 \bkt{S'}$. Thus we have $\bkt{S}\Longmapsto_2\asymp_2\bkt{S'}$, and the \emph{completeness} criterion is held.
+\end{proof}
+
+To prove \lem{comp}, we need other lemmas:
+
+\begin{lemm}\label{lem:pree}
+	If $P$ is an ABC process, then $\bkt{P}$ has no preempting power.
+\end{lemm}
+
+\begin{proof}
+	From the encoding we can see: $\bkt{P}$ is always guarded with either $\tau$ with \emph{low} priority, or an action that is not silent at all. Since only $\tau$ with \emph{medium} or \emph{high} priority has the preempting power, we can see that $\bkt{P}$ has no preempting power.
+\end{proof}
+
+\begin{lemm}\label{lem:hc-comp}
+	If $P$ is an ABC process, for all $P \ar{c} P'$ where $c \in \HC$, it holds that $\bkt{P}\ar{i(c)_l}\bkt{P'}$.
+\end{lemm}
+
+\begin{proof}
+	We prove by induction.
+
+	Let the assumption be: $\delta(P):= \forall P \ar{c} P'$ where $c \in \HC$, it holds that $\bkt{P}\ar{i(c)_l}\bkt{P'}$.
+
+	Trivial case: $\delta(\nil)$ is true.
+
+	\begin{itemize}
+		\item \emph{Prefixing:} Suppose $S=c.P$, $\delta(P)$, then $\bkt{S} = i(c)_l.\bkt{P}$. Let $S'=P$ we have the proof.
+		\item \emph{Choice:} Straightforward.
+		\item \emph{Parallel composition:} Suppose $S = P | Q$, $S \ar{c} S'$, $\delta(P)$, $\delta(Q)$, then $\bkt{S} = \bkt{P}| \bkt{Q}$. Because $c \neq \tau$, the transition stems inevitably from \emph{interleaving}.
+		Suppose it is left interleaving, then we have $P\ar{c}P'$ and $S' = P'|Q$. Because of $\delta(P)$, and \lem{pree}, we can compose a path:
+		\[ \bkt{S}= \bkt{P}|\bkt{Q}\ar{i(c)_l}\bkt{P'}|\bkt{Q} =\bkt{S'} \]
+		and we have the proof. In case of right interleaving, the proof is similar.
+	\end{itemize}
+\end{proof}
+
+
+\begin{lemm}\label{lem:bro-comp}
+	If $P$ is an ABC process, for all $P \ar{b?} P'$ where $b? \in \B?$, $\exists n \in \IN^+$ such that $\bkt{P}\ar{i(b?)_h}^n\ar{\tau_m}^n\bkt{P'}$.
+\end{lemm}
+
+\begin{proof}
+	We prove by induction.
+
+	Let the induction hypothesis be: $\Delta(P):$ the lemma is true for process $P$.
+
+	Trivial case: $\delta(\nil)$ is true.
+
+	\begin{itemize}
+		\item \emph{Prefixing:} Suppose $S=b?.P$, $\Delta(P)$, then $\bkt{S} = i(b?)_h.\tau_m.\bkt{P}$, $n=1$. Let $S'=P$ we have the proof.
+		\item \emph{Choice:} Straightforward.
+		\item \emph{Parallel composition:} Suppose $S = P | Q$, $S \ar{b?} S'$, $\Delta(P)$, $\Delta(Q)$, then $\bkt{S} = \bkt{P}| \bkt{Q}$.
+		\begin{itemize}
+			\item If the transition stems from interleaving, because of \lem{pree} we can easily compose a path that proves $\Delta(S)$.
+			\item If the transition stems from a broadcast-synchronization, which means $P\ar{b?}P'$ and $Q\ar{b?}Q'$, $S'=P'|Q'$, and then $\bkt{P}\ar{i(b?)_h}^n R \ar{\tau_m}^n\bkt{P'}$, $\bkt{Q}\ar{i(b?)_h}^j T \ar{\tau_m}^j\bkt{Q'}$. $R,T\ar{\tau_m}$ implies $R,T\nar{\tau_h}$.
+			Because of \lem{pree}, the fact that high prioritised actions cannot be preempt, and that $R,T\nar{\tau_h}$, we can compose a path:
+			\[ \bkt{S}= \bkt{P}|\bkt{Q}\ar{i(b?)_h}^{n+j}R|T \ar{\tau_m}^{n+j} \bkt{P'}|\bkt{Q'}=\bkt{S'} \]
+			and we have the proof.
+		\end{itemize}
+	\end{itemize}
+\end{proof}
+
+
+
+
+
+
+\begin{lemm}\label{lem:bro-commu}
+	$\forall j \in \IN$, if $P\ar{b!}P'$, then $\exists n \in \IN$ such that $ \bkt{P} \ar{\tau_l}\ar{\tau_h}^n\ar{\overline{i(b?)}_h}^j R \ar{\tau_m}^{n+1} \bkt{P'}$, and $R\nar{\tau_h}$.
+\end{lemm}
+
+\begin{proof}
+	We prove by induction. Let the induction hypothesis be $\theta(P):$ the lemma is true for process $P$.
+
+	Trivial case: $\theta(\nil)$ is true.
+	\begin{itemize}
+		\item \emph{Prefixing:} Suppose $S = b!.P$, $\theta(P)$, then $\bkt{S} =  \tau_l.(\overline{i(b?)}_h.X + \tau_m.\bkt{P})$ where $X:=i(b?)_h.X + \tau_m.\bkt{P}$. Let $S'=P$ we have the proof.
+		\item \emph{Choice:} Straightforward.
+		\item \emph{Parallel composition:} Suppose $S = P | Q$, $S \ar{b!} S'$, $\theta(P)$, $\theta(Q)$, then $\bkt{S} = \bkt{P}| \bkt{Q}$.
+
+	   	\begin{itemize}
+	   		\item Suppose the transition stems from interleaving. Because of \lem{pree} and $\theta(P)$, $\theta(Q)$, we can construct a path that proves  $\theta(S)$.
+   			\item Suppose the transition stems from a broadcast communication, which means $P \ar{b!} P'$ and $Q \ar{b?} Q'$ or $P \ar{b?} P'$ and $Q \ar{b!} Q'$. We can assume it to be the first case. Because $\theta(P)$ and \lem{bro-comp} we have paths:
+	   			\[\bkt{P} \ar{\tau_l}\ar{\tau_h}^n\ar{\overline{i(b?)}_h}^j R \ar{\tau_m}^{n+1} \bkt{P'}\]
+	   			\[\bkt{Q}\ar{i(b?)_h}^k T \ar{\tau_m}^k\bkt{Q'}\]
+				$\forall j \in \IN$, for certain $n$, $k$, and $R, T\nar{\tau_h}$.
+	   			Therefore we can compose a path
+	   			\[ \bkt{S}= \bkt{P}|\bkt{Q}\ar{\tau_l}\ar{\tau_h}^{n+k}R|T\ar{\tau_m}^{n+1+k}\bkt{P'}|\bkt{Q'}=\bkt{S'} \]
+	   			and we have the proof.
+	   	\end{itemize}
+	\end{itemize}
+\end{proof}
+
+
+
+
+
+
+Now we prove that \lem{comp} is true by discussing different labels of the transition.
+\begin{proof} (of \lem{comp})
+	$\forall P\ar{\alpha}_1P'$, we prove $\bkt{P}\Longmapsto_2\asymp_2\bkt{P'}$ where $\asymp_2$ is a strong bisimulation, $\alpha=\tau$ or $\alpha \in \B!$.
+	\begin{itemize}
+		\item If $\alpha=\tau$, because of \lem{hc-comp} we have $\bkt{P}\ar{\tau_l}\bkt{P'}$, which proves $\bkt{P}\Longmapsto_2\asymp_2\bkt{P'}$.
+		\item If $\alpha \in \B!$, let $j=0$ in \lem{bro-commu} we have $\bkt{P} \ar{\tau_l}\ar{\tau_h}^n \ar{\tau_m}^{n+1} \bkt{P'}$ for a certain $n \in \IN$, which proves $\bkt{P}\Longmapsto_2\asymp_2\bkt{P'}$.
+	\end{itemize}
+\end{proof}
+
+With \lem{comp} and \lem{Comp}, the \myref{Complete} criterion is proven.
+
+
+\begin{coro}
+	From the proof of \lem{comp} we can see, the \myref{Complete} criteria can be strengthened as:
+
+	\[\forall S\Longmapsto_1S'\text{, it holds that }\bkt{S}\Longmapsto_2\bkt{S'}\]
+
+	which means, the $\asymp$ relation is strengthened to identity relation.
+\end{coro}
+
+
+
+
+Now we proceed to prove the \myref{Sound} criteria. Trivially, we can prove that the encoding respects the \myref{Sound} property if $T = \bkt{S}$, by setting $S = S'$, we have $S \Longmapsto_1 S$ and $\bkt{S} \Longmapsto_2 \asymp_2 \bkt{S}$. Then we only need to discuss the case where $T \neq \bkt{S}$.
+
+\begin{proof}
+	Induction hypothesis $\zeta(P):$ if $\bkt{P} \Longmapsto_2 T$, then there exists $P'$ such that $P \Longmapsto_1 P'$, $T \Longmapsto_2 \asymp_2 \bkt{P'}$. Trivial case: $\zeta(\nil)$ is true, for there is no transition from $\nil$ to a state that is not $\nil$:  $\bkt{\nil} \nar{} $.
+
+\begin{itemize}
+	\item \textit{Prefixing:} Suppose $S = \alpha.P$, $\alpha \in Act_{ABC}$, $\zeta(P)$.
+	\[ \bkt{S} = \bkt{\alpha.P} = \begin{cases} \tau_l.(\overline{i(b?)}_h.X + \tau_m.\bkt{P})$ where $X:=i(b?)_h.X + \tau_m.\bkt{P} & \text{ if } \alpha = b! \in \B!\\
+	i(b?)_h.\tau_m.\bkt{P} & \text{ if } \alpha = b? \in \B? \\
+	i(\eta)_l. \bkt{P} & \text{ if } \alpha = \eta \in \HC \cup \{\tau\} \end{cases}\]
+	Because $i(b?)\neq \tau$, we can leave out the case where $\alpha = b?$, for the $\Longmapsto_2$ is defined as the reflexive, transitive closure of $\ar{\tau}$.
+
+	As can be seen from the equation above, we can divide all the states on the path starting from $\bkt{S}$ into two groups: after $\bkt{P}$ (including $\bkt{P}$), or not.
+	\[\textit{{After(including)}} \bkt{P}: \bkt{S}\ar{}s_1\ar{}s_2\ar{}\cdots\ar{}\bkt{P}\ar{}\cdots\ar{}T\ar{}\cdots \]
+	\begin{itemize}
+		\item Once T is after(including) the execution of $\bkt{P}$, because of $\zeta(P)$, we can find a $P'$ such that $P \Longmapsto_1 P'$ and $T\Longmapsto_2\asymp_2\bkt{P'}$, then we can compose a path: $\bkt{S} \Longmapsto_2 \bkt{P} \Longmapsto_2 T$, such that $S\Longmapsto_1P\Longmapsto_1P'$, and $T\Longmapsto_2\asymp_2\bkt{P'}$. Let $S' = P'$, we have the proof for $\zeta(S)$.
+		\item If T is strictly before $\bkt{P}$, then it must be $T=X$. Then we can execute an $\tau_m$ and reach the state $\bkt{P}$, and prove like the case before.
+	\end{itemize}
+
+	\item \textit{Choice:} Suppose $S = P + Q$, $\zeta(P)$, $\zeta(Q)$, then $\bkt{S} = \bkt{P} + \bkt{Q}$. If $\bkt{S} \Longmapsto_2 T$ because $\bkt{P} \Longmapsto_2 T$, then there exists $P'$ such that $P \Longmapsto_1 P'$, $T \Longmapsto_2 \asymp_2 \bkt{P'}$ because of $\zeta(P)$. Let $S'=P'$, then we can compose a transition $\bkt{S} = \bkt{P} + \bkt{Q} \Longmapsto_2 T$, such that
+	\[S=P+Q \Longmapsto_1 S'=P'\text{, }T \Longmapsto_2 \asymp_2 \bkt{S'}=\bkt{P'}\]
+	which proves $\zeta(S)$ true.
+
+	\item \emph{Parallel composition:} Suppose $S = P | Q$, $\bkt{S} \Longmapsto_2 T$, $\zeta(P)$, $\zeta(Q)$, then $\bkt{S} = \bkt{P} | \bkt{Q}$. We decompose the path $\bkt{S}\Longmapsto_2T$ like in \Sec{ABC}:
+	\[\bkt{P}\ar{}\ar{}\cdots\ar{}\ar{}R\]
+	\[\bkt{Q}\ar{}\ar{}\cdots\ar{}\ar{}S\]
+	where $T=R|S$.
+
+	Because of $\zeta(P)$ and $\zeta(Q)$ we can find some $P'$ and some $Q'$ such that:
+	\[ P \Longmapsto_1 P', R \Longmapsto_2 \asymp_2 \bkt{P'} \]
+	\[ Q \Longmapsto_1 Q', S \Longmapsto_2 \asymp_2 \bkt{Q'} \]
+
+	Because of \lem{findable} below, we can find such $P'$, $Q'$ that $R|S \Longmapsto_2 \asymp \bkt{P'}|\bkt{Q'}$ and $P|Q\Longmapsto_1 P'|Q'$. Let $S' = P'|Q'$ we have the proof for $\zeta(S)$.
+\end{itemize}
+\end{proof}
+
+
+\begin{lemm}\label{lem:findable}
+	We can find such $P'$, $Q'$ that $R|S \Longmapsto_2 \asymp \bkt{P'}|\bkt{Q'}$ and $P|Q\Longmapsto_1 P'|Q'$.
+\end{lemm}
+
+\begin{proof}
+	With the following two lemmas.
+\end{proof}
+
+Let $\R$ be the relation that relates a state in the source language with all its middle states of the transition.
+
+\begin{lemm}
+	If $S_1 \R T_1$ and $T_1 \ar{\alpha}T_2$ then $\exists S_2$ such that $S_1\Longmapsto S_2$ and $S_2\R T_2$.
+\end{lemm}
+
+\begin{proof}
+
+\end{proof}
+
+\begin{lemm}
+	If $S_1 \R T_1$ then $\exists S_2, T_2$ such that $T_1\Longmapsto T_2$ and $S_1\Longmapsto T_2$ and $T_2 \asymp \bkt{S_2}$.
+\end{lemm}
+
+\begin{proof}
+
+\end{proof}
+
+
+
+\subsubsection{Divergence reflection}
+\begin{ppt}[Divergence reflection]
+	A translation $\bkt{\cdot}$: $L_1 \to L_2$ reflects divergence if, for every S such that $\bkt{S} \longmapsto_2^w$, it holds that $S \longmapsto_1^w$, where
+	\[ S \longmapsto^w \text{ iff } \exists S\ar{\gamma_1}s_1\ar{\gamma_2}s_2\ar{\gamma_3}s_3\ar{\gamma_4}\cdots\text{ (infinite)} \]
+	where $\gamma_i$ is silent action or $\gamma_i \in \B!$, in case that $S$ is a process in ABC. We call $S$ \emph{divergent} if $S \longmapsto^w$.
+\end{ppt}
+
+\begin{proof}
+	The property states, that the encoding does not introduce divergence that did not exist. We can see from the encoding, it maps an ABC process to a CCS$_P$ process, only introducing infinite expression when translating $\bkt{b!.P}=\tau_l.(\overline{i(b?)}_h.X + \tau_m.\bkt{P})$ where $X=i(b?)_h.X + \tau_m.\bkt{P}$. Then we can easily conclude: if $\bkt{S} \longmapsto_2^w$, not involving $\bkt{b!}$, then $S \longmapsto_1^w$.
+
+	If $\bkt{S} \longmapsto_2^w$ where some process in the path is doing broadcast communication, resulting in some $\tau_h$. Because of $\lem{bro-comp}$ and $\lem{bro-commu}$ we can see that the number of $\tau_h$ corresponds to the number of $b?$, and thus $\bkt{S}$ is divergent only if $S$ is divergent.
+\end{proof}
+
+\subsubsection{Success sensitiveness}
+\begin{ppt}[Success sensitiveness]
+
+\end{ppt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\begin{thebibliography}{10}
+
+\bibitem{vGH15}
+VAN GLABBEEK, Rob; H\"OFNER, Peter. Progress, fairness and justness in process algebra. arXiv preprint arXiv:1501.03268, 2015.
+
+\bibitem{vG18}
+VAN GLABBEEK, Rob. Component. In progress.
+
+\bibitem{CH90}
+CLEAVELAND, Rance; HENNESSY, Matthew. Priorities in process algebras. Information and Computation, Volume 87, Issues 1–2, 1990, Pages 58-77, ISSN 0890-5401.
+
+\bibitem{dB18}
+DE BORTOLI, Filippo. A Justness-aware Semantics Project Report. 2018.
+
+\bibitem{G10}
+GORLA, Daniele. Towards a unified approach to encodability and separation results for process calculi, Information and Computation, Volume 208, Issue 9, 2010, Pages 1031-1053, ISSN 0890-5401.
+
+\bibitem{VBG09}
+VERSARI, C., BUSI, N.,  GORRIERI, R. (2009). An expressiveness study of priority in process calculi. Mathematical Structures in Computer Science, 19(6), 1161-1189. doi:10.1017/S0960129509990168
+
+\end{thebibliography}
+
+\end{document}
